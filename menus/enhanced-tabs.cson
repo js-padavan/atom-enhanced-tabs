@@ -1,0 +1,16 @@
+# See https://atom.io/docs/latest/creating-a-package#menus for more details
+
+'menu': [
+  {
+    'label': 'Packages'
+    'submenu': [
+      'label': 'enhanced-tabs'
+      'submenu': [
+        {
+          'label': 'Toggle'
+          'command': 'enhanced-tabs:toggle'
+        }
+      ]
+    ]
+  }
+]

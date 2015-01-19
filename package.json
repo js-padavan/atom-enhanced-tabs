@@ -1,0 +1,19 @@
+{
+  "name": "enhanced-tabs",
+  "main": "./lib/enhanced-tabs",
+  "version": "0.0.0",
+  "description": "A short description of your package",
+  "activationCommands": {
+    "atom-workspace": "enhanced-tabs:toggle"
+  },
+  "repository": "https://github.com/atom/enhanced-tabs",
+  "license": "MIT",
+  "engines": {
+    "atom": ">0.50.0"
+  },
+  "dependencies": {
+    "event-kit": "latest",
+    "lodash": "^2.4.1",
+    "space-pen": "latest"
+  }
+}
