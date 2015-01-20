@@ -9,9 +9,15 @@ module.exports = EnhancedTabs =
   popup: null
   activeTab: null
 
+  config: ()->
+    console.log 'constructor called'
+
   activate: (state) ->
     editor = atom.workspace.getActiveEditor()
     @popup = new FilesPopup(editor);
+    @activeTab =
+      title: editor.getLongTitle()
+      URI: editor.getURI()
     # Events subscribed to in atom's system can be easily cleaned up with a CompositeDisposable
     @subscriptions = new CompositeDisposable
 
@@ -22,23 +28,28 @@ module.exports = EnhancedTabs =
     @subscriptions.add atom.workspace.observeTextEditors (editor)=>
       title = editor.getLongTitle()
       URI = editor.getURI()
-      console.log('observed ', URI)
-      @updateOpenedTab(title: title, URI: URI)
+      if URI == @activeTab.URI
+        @addToOpenedTabs(title: title, URI: URI)
+      else
+        @openedTabs.push(title: title, URI: URI)
 
     @subscriptions.add atom.workspace.onDidChangeActivePaneItem (item)=>
       title = item.getLongTitle?()
       URI = item.getURI?()
       return unless title && URI
-      console.log('changed ', URI)
-      console.dir(@openedTabs);
-      @updateOpenedTab(title: title, URI: URI)
-      # openedTabsMoveToTop(@activeTab)
-      # @activeTab = title: title, URI: URI
+      @addToOpenedTabs(@activeTab)
+      @activeTab =
+        title: title
+        URI: URI
 
     @subscriptions.add atom.workspace.onDidDestroyPaneItem (event)=>
       URI = event.item.getURI?()
-      console.log('destoroyed', URI)
       _.remove(@openedTabs, URI: URI)
+
+  # openedTabs behaves as stack
+  addToOpenedTabs: (elem)->
+    _.remove(@openedTabs, URI: elem.URI)
+    @openedTabs.splice(0, 0, elem)
 
   onkeyup: (event)->
     @onkeyup.first  = ++@onkeyup.first || 0
@@ -57,9 +68,6 @@ module.exports = EnhancedTabs =
   removeCommandDispatcher: ->
     document.removeEventListener 'keyup', @listener
 
-  updateOpenedTab: (elem)->
-    _.remove(@openedTabs, URI: elem.URI)
-    @openedTabs.splice(@openedTabs.length - 1, 0, elem)
 
   openedTabsMoveToTop: (elem)->
     return unless elem
@@ -74,7 +82,9 @@ module.exports = EnhancedTabs =
     enhancedTabsViewState: @enhancedTabsView.serialize()
 
   showTabsNav: ->
-    @popup.setItems(Array.prototype.slice.call(@openedTabs).reverse());
+    # Array.prototype.slice.call(@openedTabs).reverse()
+    console.log(@openedTabs);
+    @popup.setItems(@openedTabs);
     @popup.onConfirm = (item)=>
       atom.workspace.open(item.URI)
       @removeCommandDispatcher()
