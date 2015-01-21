@@ -24,7 +24,8 @@ class FilesPopup extends SimpleSelectListView
 
   viewForItem: (item)->
     "<li>
-      <div class='sel'>#{item.title}</div>
+      <span class='icon icon-file-text' data-name='" + path.extname(item.URI) + "'></span>
+      <span class='sel'>#{item.title}</span>
     </li>"
 
   confirmed: (item)->
