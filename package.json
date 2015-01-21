@@ -6,7 +6,7 @@
   "activationCommands": {
     "atom-workspace": "enhanced-tabs:toggle"
   },
-  "repository": "https://github.com/atom/enhanced-tabs",
+  "repository": "https://github.com/js-padavan/atom-enhanced-tabs",
   "license": "MIT",
   "engines": {
     "atom": ">0.50.0"
