@@ -9,9 +9,6 @@ module.exports = EnhancedTabs =
   popup: null
   activeTab: null
 
-  config: ()->
-    console.log 'constructor called'
-
   activate: (state) ->
     editor = atom.workspace.getActiveEditor()
     @popup = new FilesPopup(editor);
@@ -34,7 +31,6 @@ module.exports = EnhancedTabs =
         @openedTabs.push(title: title, URI: URI)
 
     @subscriptions.add atom.workspace.onDidChangeActivePaneItem (item)=>
-      console.log(item)
       return unless item
       title = item.getLongTitle?()
       URI = item.getURI?()
@@ -87,8 +83,6 @@ module.exports = EnhancedTabs =
     enhancedTabsViewState: @enhancedTabsView.serialize()
 
   showTabsNav: ->
-    # Array.prototype.slice.call(@openedTabs).reverse()
-    console.log(@openedTabs);
     @popup.setItems(@openedTabs);
     @popup.onConfirm = (item)=>
       atom.workspace.open(item.URI)
