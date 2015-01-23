@@ -57,7 +57,10 @@ module.exports = EnhancedTabs =
     @onkeyup.first  = ++@onkeyup.first || 0
     switch event.keyCode
       when 9
-        if (@onkeyup.first > 1)
+        break unless @onkeyup.first > 1
+        if (event.shiftKey)
+          @popup.selectPreviousItemView()
+        else
           @popup.selectNextItemView()
       when 17 then @popup.confirmSelection()
       # else @popup.cancel()
