@@ -34,6 +34,8 @@ module.exports = EnhancedTabs =
         @openedTabs.push(title: title, URI: URI)
 
     @subscriptions.add atom.workspace.onDidChangeActivePaneItem (item)=>
+      console.log(item)
+      return unless item
       title = item.getLongTitle?()
       URI = item.getURI?()
       return unless title && URI
