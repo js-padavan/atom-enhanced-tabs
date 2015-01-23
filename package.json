@@ -1,7 +1,7 @@
 {
   "name": "enhanced-tabs",
   "main": "./lib/enhanced-tabs",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "webstorm-like tab switching behavior for atom",
   "activationCommands": {
     "atom-workspace": "enhanced-tabs:toggle"
