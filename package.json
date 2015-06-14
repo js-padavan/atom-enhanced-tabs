@@ -1,7 +1,7 @@
 {
   "name": "enhanced-tabs",
   "main": "./lib/enhanced-tabs",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "webstorm-like tab switching behavior for atom",
   "activationCommands": {
     "atom-workspace": "enhanced-tabs:toggle"
@@ -9,11 +9,10 @@
   "repository": "https://github.com/js-padavan/atom-enhanced-tabs",
   "license": "MIT",
   "engines": {
-    "atom": ">0.50.0"
+    "atom": ">=0.174.0 <2.0.0"
   },
   "dependencies": {
-    "event-kit": "latest",
     "lodash": "^2.4.1",
-    "space-pen": "latest"
+    "atom-space-pen-views": "latest"
   }
 }

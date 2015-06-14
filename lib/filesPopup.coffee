@@ -1,13 +1,12 @@
 path = require 'path'
 SimpleSelectListView = require './SimpleListView'
-{CompositeDisposable} = require 'event-kit'
+{CompositeDisposable} = require 'atom'
 
 class FilesPopup extends SimpleSelectListView
   visible: false
   panel: null
 
   initialize:  (@editor)->
-    console.log 'popupinit with', @editor, arguments
     super
     @editorView = atom.views.getView(@editor)
     @addClass('enhanced-tabs-popup')
@@ -56,7 +55,6 @@ class FilesPopup extends SimpleSelectListView
 
 
   attach: ->
-    console.log 'attached called';
     # cursorMarker = @editor.getLastCursor().getMarker()
     # @overlayDecoration = @editor.decorateMarker(cursorMarker, type: 'overlay', position: 'tail', item: this)
     @visible = true
@@ -73,7 +71,6 @@ class FilesPopup extends SimpleSelectListView
   cancel: =>
     # console.log 'cancel called';
     # return unless @active
-    console.log 'active passed';
     @visible = false;
     # @overlayDecoration?.destroy()
     # @overlayDecoration = undefined

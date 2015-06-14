@@ -1,3 +1,4 @@
+
 {CompositeDisposable} = require 'atom'
 FilesPopup = require './filesPopup'
 _ = require 'lodash'
@@ -10,7 +11,7 @@ module.exports = EnhancedTabs =
   activeTab: null
 
   activate: (state) ->
-    editor = atom.workspace.getActiveEditor()
+    editor = atom.workspace.getActiveTextEditor()
     @popup = new FilesPopup(editor);
     @activeTab =
       title: editor.getLongTitle()
@@ -25,6 +26,9 @@ module.exports = EnhancedTabs =
     @subscriptions.add atom.workspace.observeTextEditors (editor)=>
       title = editor.getLongTitle()
       URI = editor.getURI()
+      # skiping new files
+      if (URI == undefined)
+        return;
       if URI == @activeTab.URI
         @addToOpenedTabs(title: title, URI: URI)
       else

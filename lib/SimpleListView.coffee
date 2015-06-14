@@ -1,4 +1,4 @@
-{$, $$, View} = require 'space-pen'
+{$, $$, View} = require 'atom-space-pen-views'
 # _ = require 'underscore-plus'
 
 Keys =
@@ -96,7 +96,6 @@ class SimpleSelectListView extends View
   # if no item has been selected
   confirmSelection: =>
     item = @getSelectedItem()
-    console.log item
     if item?
       @confirmed item
       @cancel()
@@ -104,7 +103,6 @@ class SimpleSelectListView extends View
       @cancel()
 
   attached:->
-    console.log 'attached called'
     @active = true
 
 
