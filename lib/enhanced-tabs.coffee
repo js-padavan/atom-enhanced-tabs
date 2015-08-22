@@ -14,7 +14,7 @@ module.exports = EnhancedTabs =
     editor = atom.workspace.getActiveTextEditor()
     @popup = new FilesPopup(editor);
     @activeTab =
-      title: editor.getLongTitle()
+      title: editor.getLongTitle?() || editor.getTitle?()
       URI: editor.getURI()
     # Events subscribed to in atom's system can be easily cleaned up with a CompositeDisposable
     @subscriptions = new CompositeDisposable
@@ -24,7 +24,7 @@ module.exports = EnhancedTabs =
 
 
     @subscriptions.add atom.workspace.observeTextEditors (editor)=>
-      title = editor.getLongTitle()
+      title = editor.getLongTitle?() || editor.getTitle?()
       URI = editor.getURI()
       # skiping new files
       if (URI == undefined)
@@ -36,7 +36,7 @@ module.exports = EnhancedTabs =
 
     @subscriptions.add atom.workspace.onDidChangeActivePaneItem (item)=>
       return unless item
-      title = item.getLongTitle?()
+      title = item.getLongTitle?() || item.getTitle?()
       URI = item.getURI?()
       return unless title && URI
       @addToOpenedTabs(@activeTab)
