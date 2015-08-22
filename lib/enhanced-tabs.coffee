@@ -1,4 +1,3 @@
-
 {CompositeDisposable} = require 'atom'
 FilesPopup = require './filesPopup'
 _ = require 'lodash'
@@ -9,13 +8,16 @@ module.exports = EnhancedTabs =
   active: false
   popup: null
   activeTab: null
+  initialized: false
 
   activate: (state) ->
     editor = atom.workspace.getActiveTextEditor()
-    @popup = new FilesPopup(editor);
-    @activeTab =
-      title: editor.getLongTitle?() || editor.getTitle?()
-      URI: editor.getURI()
+    if (editor)
+      @popup = new FilesPopup(editor);
+      @activeTab =
+        title: editor.getLongTitle?() || editor.getTitle?()
+        URI: editor.getURI()
+      initialized = true;
     # Events subscribed to in atom's system can be easily cleaned up with a CompositeDisposable
     @subscriptions = new CompositeDisposable
 
@@ -24,6 +26,14 @@ module.exports = EnhancedTabs =
 
 
     @subscriptions.add atom.workspace.observeTextEditors (editor)=>
+      if (!initialized && editor)
+        @popup = new FilesPopup(editor);
+        @activeTab =
+          title: editor.getLongTitle?() || editor.getTitle?()
+          URI: editor.getURI()
+        initialized = true;
+      if (!editor)
+        return;
       title = editor.getLongTitle?() || editor.getTitle?()
       URI = editor.getURI()
       # skiping new files
@@ -87,7 +97,15 @@ module.exports = EnhancedTabs =
     enhancedTabsViewState: @enhancedTabsView.serialize()
 
   showTabsNav: ->
-    @popup.setItems(@openedTabs);
+    if (!@popup)
+      return;
+    items =_.filter( @openedTabs
+            (item)->
+              console.log(item.URI)
+              return item.URI != @activeTab.URI
+            @)
+
+    @popup.setItems(items);
     @popup.onConfirm = (item)=>
       atom.workspace.open(item.URI)
       @removeCommandDispatcher()
