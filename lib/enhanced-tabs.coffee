@@ -72,16 +72,35 @@ module.exports = EnhancedTabs =
           @popup.selectPreviousItemView()
         else
           @popup.selectNextItemView()
-      when 17 then @popup.confirmSelection()
+      when 17
+        if @active
+          @popup.confirmSelection()
+      when 27
+        @cancelPopup()
+
       # else @popup.cancel()
+
+  onclick: (event) ->
+    # this will only run when clicking away from the list
+    # because the click handler on SimpleListView does a stopPropagation()
+    @cancelPopup()
+
+  cancelPopup: ->
+    if @popup
+      @popup.cancel()
+      @removeCommandDispatcher()
+      @active = false
 
   registerCommandDispatcher: ->
     @onkeyup.first = 0;
-    @listener = @onkeyup.bind(this);
-    document.addEventListener 'keyup', @listener
+    @listenerKeyup = @onkeyup.bind(this);
+    @listenerClick = @onclick.bind(this);
+    document.addEventListener 'keyup', @listenerKeyup
+    document.addEventListener 'click', @listenerClick
 
   removeCommandDispatcher: ->
-    document.removeEventListener 'keyup', @listener
+    document.removeEventListener 'keyup', @listenerKeyup
+    document.removeEventListener 'click', @listenerClick
 
 
   openedTabsMoveToTop: (elem)->
