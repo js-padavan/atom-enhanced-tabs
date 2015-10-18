@@ -20,7 +20,13 @@ class SimpleSelectListView extends View
       e.preventDefault()
       e.stopPropagation()
 
-      @selectItemView $(e.target).closest("li")
+      view = $(e.target).closest("li")
+      item = @findItemFromView view
+      if item
+        itemIndex = @items.indexOf item
+        if itemIndex >= 0
+          @curIndex = itemIndex
+          @selectItemView view
 
     @list.on "mouseup", "li", (e) =>
       e.preventDefault()
@@ -57,6 +63,16 @@ class SimpleSelectListView extends View
   setItems: (items=[]) ->
     @items = items
     @populateList()
+
+  # Private: Searches the items array for the item corresponding to the view
+  #
+  # view - the {jQuery} view to be selected
+  findItemFromView: (view) ->
+    return unless view.length
+    viewText = view.text().trim()
+    items = @items.filter (item) ->
+      item.title == viewText
+    return items[0]
 
   # Private: Unselects all views, selects the given view
   #
