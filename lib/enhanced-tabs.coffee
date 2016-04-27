@@ -22,7 +22,7 @@ module.exports = EnhancedTabs =
     @subscriptions = new CompositeDisposable
 
     # Register command that toggles this view
-    @subscriptions.add atom.commands.add 'atom-workspace', 'enhanced-tabs:toggle': => @toggle()
+    @subscriptions.add atom.commands.add 'atom-workspace', 'enhanced-tabs:toggle', (e) => @toggle(e)
 
 
     @subscriptions.add atom.workspace.observeTextEditors (editor)=>
@@ -72,11 +72,15 @@ module.exports = EnhancedTabs =
           @popup.selectPreviousItemView()
         else
           @popup.selectNextItemView()
+        event.stopImmediatePropagation();
       when 17
         if @active
           @popup.confirmSelection()
+        event.stopImmediatePropagation();
       when 27
         @cancelPopup()
+        event.stopImmediatePropagation();
+
 
       # else @popup.cancel()
 
@@ -95,12 +99,12 @@ module.exports = EnhancedTabs =
     @onkeyup.first = 0;
     @listenerKeyup = @onkeyup.bind(this);
     @listenerClick = @onclick.bind(this);
-    document.addEventListener 'keyup', @listenerKeyup
-    document.addEventListener 'click', @listenerClick
+    document.body.addEventListener 'keyup', @listenerKeyup
+    document.body.addEventListener 'click', @listenerClick
 
   removeCommandDispatcher: ->
-    document.removeEventListener 'keyup', @listenerKeyup
-    document.removeEventListener 'click', @listenerClick
+    document.body.removeEventListener 'keyup', @listenerKeyup
+    document.body.removeEventListener 'click', @listenerClick
 
 
   openedTabsMoveToTop: (elem)->
@@ -113,7 +117,8 @@ module.exports = EnhancedTabs =
     @subscriptions.dispose()
 
   serialize: ->
-    enhancedTabsViewState: @enhancedTabsView.serialize()
+    # console.log(@enhancedTabsView);
+    # enhancedTabsViewState: @enhancedTabsView.serialize();
 
   showTabsNav: ->
     if (!@popup)
@@ -134,6 +139,9 @@ module.exports = EnhancedTabs =
     @active = true;
 
 
-  toggle: ->
+  toggle: (e)->
+    console.log('toggle called');
+    e.stopImmediatePropagation();
     if (!@active)
       @showTabsNav();
+    false;

@@ -10,3 +10,5 @@
 'atom-workspace':
   'ctrl-tab': 'enhanced-tabs:toggle',
   'ctrl-shift-tab': 'enhanced-tabs:toggle'
+'body':
+  'ctrl-tab': 'unset!'
